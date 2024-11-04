@@ -14,7 +14,7 @@ App = {
     return App.initContract();
   },
   initContract: () => {
-    $.getJSON("XeviaToken.json", (data) => {
+    $.getJSON("PuruToken.json", (data) => {
       var MyTokenArtifact = data;
       App.contracts.MyToken = TruffleContract(MyTokenArtifact);
       App.contracts.MyToken.setProvider(App.web3Provider);

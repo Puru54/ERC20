@@ -1,4 +1,4 @@
-const PHILANTHROTOKEN_ADDRESS = "0xE377c6921Ddff70e782F0c258dA69b1941a7eb21"; //ganache
+const PHILANTHROTOKEN_ADDRESS = "0x8C4898974C378bA8CE69Ac48afc0994471A51eac"; //ganache
 // const PHILANTHROTOKEN_ADDRESS = "0xAeee28918d5FA2a3482Df2804d7a12Ded3F5f1AF"; //sepolia
 const PHILANTHROTOKEN_ABI = [
   {
@@ -561,7 +561,7 @@ buyInput.addEventListener("input", () => {
   const ethAmount = parseFloat(buyInput.value);
   if (!isNaN(ethAmount) && ethAmount >= 0) {
     const tokenAmount = ethAmount * 1000;
-    conversionValue.textContent = ` ≈ ${tokenAmount} XEV`;
+    conversionValue.textContent = ` ≈ ${tokenAmount} PUR`;
   } else {
     conversionValue.textContent = "";
   }
@@ -738,7 +738,7 @@ async function buyTokens(ethAmount) {
 //       });
 //     console.log(result);
 //     window.alert(
-//       "Donation Successful " + _amount + " XEV deducted from account"
+//       "Donation Successful " + _amount + " PUR deducted from account"
 //     );
 //     loadBlockchainData();
 //     return true;
@@ -773,7 +773,7 @@ async function handleTransfer(_toAddress, _amount, _campaignID) {
           .send({ from: selectedAccount })
           .then(() => {
             window.alert(
-              "Donation Successful " + _amount + " XEV deducted from account"
+              "Donation Successful " + _amount + " PUR deducted from account"
             );
             document.querySelector(".spinner").style.display = "none";
             loadBlockchainData();
