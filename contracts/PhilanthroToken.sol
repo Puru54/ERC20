@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 contract PhilanthroToken is ERC20 {
     string public name = "PhilanthroToken";
     string public desc = "A Token for Charitable Giving";
-    string public symbol = "XEV";
+    string public symbol = "PUR";
     uint8 public decimals = 2;
     uint256 public INITIAL_SUPPLY = 1000000000;
 
