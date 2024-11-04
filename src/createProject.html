@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create Project</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link rel="stylesheet" href="./css/main.css" />
+    <noscript><link rel="stylesheet" href="./css/noscript.css" /></noscript>
+    <link rel="icon" type="image/png" href="./img/logo/download_white.png" />
+
+    <style>
+      .wrapper::after,
+      .wrapper::before {
+        width: 0;
+        height: 0;
+      }
+      #wrapper > header {
+        padding: 4.5em 0 0em 0;
+      }
+      #wrapper > header .inner {
+        width: 66em;
+      }
+      .inner {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+      .inner > div {
+        width: 600px;
+      }
+      .inner > form {
+        width: 600px;
+        padding: 2rem;
+      }
+      .imagePath::placeholder {
+        color: aliceblue !important;
+      }
+    </style>
+  </head>
+  <body
+    class="is-preload"
+    style="
+      background-image: linear-gradient(
+          to top,
+          rgba(46, 49, 65, 0.61),
+          rgba(46, 49, 65, 0.8)
+        ),
+        url('../../img/bg.jpg');
+    "
+  >
+    <!-- LOADER -->
+    <section class="spinner">
+      <div class="loader"></div>
+    </section>
+    <!-- Page Wrapper -->
+    <div id="page-wrapper">
+      <!-- Header -->
+      <header id="header">
+        <h1>
+          <a href="index.html"
+            ><span style="color: #7895ff; font-weight: bold">Philanthro</span
+            >Tokens</a
+          >
+        </h1>
+        <nav>
+          <a href="#menu">Menu</a>
+        </nav>
+      </header>
+      <!-- Menu -->
+      <nav id="menu">
+        <div class="inner">
+          <h2>Menu</h2>
+          <ul class="links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="findProjects.html">Find Projects</a></li>
+            <li><a href="createProject.html">Create Project</a></li>
+            <li>
+              <button data-modal-target="#modal" style="margin-top: 1rem">
+                Buy XEV
+              </button>
+              <div class="modal" id="modal">
+                <div class="modal-header">
+                  <div class="title">Buy PhilanthroTokens (XEV)</div>
+                  <button data-close-button class="close-button">
+                    &#10006;
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Buy PhilanthroTokens (XEV) to donate to projects on this
+                  platform. 1 ETH is equivalent to 1000 XEV.
+                  <input
+                    type="number"
+                    class="buy"
+                    placeholder="Ethereum Amount"
+                    min="0"
+                  />
+                  <span class="conversion">&#8776;</span>
+                  <button
+                    style="
+                      display: block;
+                      background-color: #7895ff;
+                      margin-block: 1rem;
+                    "
+                    class="buyBTN"
+                  >
+                    Buy
+                  </button>
+                </div>
+              </div>
+              <div id="overlay"></div>
+            </li>
+          </ul>
+          <a href="#" class="close">Close</a>
+        </div>
+      </nav>
+
+      <!-- Wrapper -->
+      <section id="wrapper">
+        <header>
+          <div class="inner">
+            <div>
+              <h2>Create Project</h2>
+              <p>
+                Empower your philanthropic vision with decentralized fundraising
+                and transparent transactions.
+              </p>
+            </div>
+            <form class="myForm">
+              <div>
+                <label>Title</label>
+                <input
+                  class="title input"
+                  type="text"
+                  placeholder="title"
+                  required
+                />
+              </div>
+              <div>
+                <label>Description</label>
+                <textarea
+                  class="description input"
+                  placeholder="description"
+                ></textarea>
+              </div>
+              <div>
+                <label>Location</label>
+                <input
+                  class="location input"
+                  type="text"
+                  placeholder="location"
+                  required
+                />
+              </div>
+              <div>
+                <label>Target Amount</label>
+                <input
+                  class="target input"
+                  type="text"
+                  placeholder="amount"
+                  required
+                />
+              </div>
+              <div class="App">
+                <label>Image</label>
+                <div class="spinnerCont">
+                  <div class="loader"></div>
+                </div>
+                <div id="enterFile" style="margin: 1rem 0">
+                  <input type="file" id="fileInput" />
+                  <input
+                    class="btn-upload"
+                    type="button"
+                    value="Upload"
+                    onclick="handleUpload()"
+                  />
+                </div>
+                <input
+                  class="imagePath input"
+                  type="text"
+                  id="ipfsLink"
+                  placeholder="Upload image file to get URL"
+                  readonly
+                  required
+                />
+              </div>
+              <div>
+                <label>Deadline</label>
+                <input
+                  class="deadline input"
+                  style="
+                    color: rgba(255, 255, 255, 0.425);
+                    width: 100%;
+                    background: rgba(255, 255, 255, 0.025);
+                    padding: 0 1em;
+                    border: none;
+                    border: solid 2px rgba(255, 255, 255, 0.125);
+                    border-radius: 5px;
+                    font-size: 16.5pt;
+                    font-weight: 300;
+                    height: 2.75em;
+                  "
+                  type="date"
+                />
+              </div>
+              <div class="btnCont">
+                <button>Create Project</button>
+              </div>
+            </form>
+          </div>
+        </header>
+      </section>
+    </div>
+    <script>
+      const fileInput = document.getElementById("fileInput");
+      const button = document.getElementById("btn-upload");
+      const loadingDiv = document.querySelector(".spinnerCont");
+      const spinnerDiv = document.getElementById("spinner");
+      const ipfsLink = document.getElementById("ipfsLink");
+
+      document.querySelector(".myForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        let title = document.querySelector(".title").value;
+        let description = document.querySelector(".description").value;
+        let location = document.querySelector(".location").value;
+        let targetAmount = document.querySelector(".target").value;
+        let deadline = document.querySelector(".deadline").value;
+        let image = document.querySelector(".imagePath").value;
+
+        var today = new Date().toISOString().split("T")[0];
+        if (deadline < today) {
+          window.alert("Please select a date after today.");
+          return;
+        }
+        createCampaign(
+          title,
+          description,
+          location,
+          targetAmount,
+          Date.parse(deadline) / 1000,
+          image
+        ).then((x) => {
+          if (x === true) {
+            window.location.assign("./findProjects.html");
+          }
+        });
+      });
+
+      let file = null;
+
+      function setFile(selectedFile) {
+        file = selectedFile;
+      }
+      fileInput.addEventListener("change", (e) => {
+        setFile(e.target.files[0]);
+      });
+
+      async function handleUpload() {
+        if (file) {
+          try {
+            const formData = new FormData();
+            formData.append("file", file);
+            showLoading();
+
+            const xhr = new XMLHttpRequest();
+            xhr.open(
+              "POST",
+              "https://api.pinata.cloud/pinning/pinFileToIPFS",
+              true
+            );
+            xhr.setRequestHeader("pinata_api_key", "4e2e0b082a3a7a7624d3");
+            xhr.setRequestHeader(
+              "pinata_secret_api_key",
+              "f9ccf3142e278df713936a3a8032d7c2e5b5336543a884f4b44e40b707ddba35"
+            );
+            xhr.onload = function () {
+              if (xhr.status === 200) {
+                const resFile = JSON.parse(xhr.responseText);
+
+                const imgHash = `https://gateway.ipfs.io/ipfs/${resFile.IpfsHash}`;
+                setIpfsPath(imgHash);
+                console.log(imgHash);
+              } else {
+                alert("Unable to upload image to Pinata");
+              }
+              hideLoading();
+            };
+            xhr.send(formData);
+            console.log("SUCCESS");
+          } catch (err) {
+            alert("Unable to upload image to Pinata");
+            console.log(err);
+          }
+        } else {
+          alert("No file selected");
+        }
+      }
+
+      function setIpfsPath(path) {
+        ipfsLink.value = path;
+      }
+
+      function showLoading() {
+        loadingDiv.style.display = "flex";
+        document.getElementById("enterFile").style.display = "none";
+      }
+
+      function hideLoading() {
+        loadingDiv.style.display = "none";
+        document.getElementById("enterFile").style.display = "block";
+      }
+    </script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script src="./js/contract.js"></script>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/jquery.scrollex.min.js"></script>
+    <script src="./js/browser.min.js"></script>
+    <script src="./js/breakpoints.min.js"></script>
+    <script src="./js/util.js"></script>
+    <script src="./js/main.js"></script>
+  </body>
+</html>

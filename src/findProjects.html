@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Find Projects</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link rel="stylesheet" href="./css/main.css" />
+    <noscript><link rel="stylesheet" href="./css/noscript.css" /></noscript>
+    <link rel="icon" type="image/png" href="./img/logo/download_white.png" />
+    <style>
+      .wrapper::after,
+      .wrapper::before {
+        width: 0;
+        height: 0;
+      }
+      .wrapper {
+        margin: 3.5em 0 0 0;
+      }
+    </style>
+  </head>
+  <body class="is-preload">
+    <!-- LOADER -->
+    <section class="spinner">
+      <div class="loader"></div>
+    </section>
+    <!-- Page Wrapper -->
+    <div id="page-wrapper">
+      <!-- Header -->
+      <header id="header">
+        <h1>
+          <a href="index.html"
+            ><span style="color: #7895ff; font-weight: bold">Philanthro</span
+            >Tokens</a
+          >
+        </h1>
+        <nav>
+          <a href="#menu">Menu</a>
+        </nav>
+      </header>
+      <!-- Menu -->
+      <nav id="menu">
+        <div class="inner">
+          <h2>Menu</h2>
+          <ul class="links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="findProjects.html">Find Projects</a></li>
+            <li><a href="createProject.html">Create Project</a></li>
+            <li>
+              <button data-modal-target="#modal" style="margin-top: 1rem">
+                Buy XEV
+              </button>
+              <div class="modal" id="modal">
+                <div class="modal-header">
+                  <div class="title">Buy PhilanthroTokens (XEV)</div>
+                  <button data-close-button class="close-button">
+                    &#10006;
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Buy PhilanthroTokens (XEV) to donate to projects on this
+                  platform. 1 ETH is equivalent to 1000 XEV.
+                  <input
+                    type="number"
+                    class="buy"
+                    placeholder="Ethereum Amount"
+                    min="0"
+                  />
+                  <span class="conversion">&#8776;</span>
+                  <button
+                    style="
+                      display: block;
+                      background-color: #7895ff;
+                      margin-block: 1rem;
+                    "
+                    class="buyBTN"
+                  >
+                    Buy
+                  </button>
+                </div>
+              </div>
+              <div id="overlay"></div>
+            </li>
+          </ul>
+          <a href="#" class="close">Close</a>
+        </div>
+      </nav>
+
+      <!-- Wrapper -->
+      <section id="wrapper">
+        <!-- Content -->
+        <div class="wrapper">
+          <div class="inner">
+            <h3 class="major" style="font-size: 2rem">All Projects</h3>
+            <p>
+              This is the epicenter of generosity. This page is where you'll
+              find a collection of inspiring campaigns driven by the
+              PhilanthroTokens platform. Each project represents a unique
+              opportunity to make a difference, from empowering communities to
+              protecting our planet. Explore, connect, and contribute to the
+              causes that touch your heart, all on one centralized platform.
+            </p>
+
+            <section class="features"></section>
+          </div>
+        </div>
+      </section>
+    </div>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script src="./js/contract.js"></script>
+    <script>
+      async function main() {
+        await loadBlockchainData();
+        console.log(campaigns);
+      }
+      let container = document.querySelector(".features");
+      function calcProgress(amountRaised, targetAmount) {
+        return ((amountRaised / targetAmount) * 100).toFixed(2);
+      }
+
+      function calcProgressbar(amountRaised, targetAmount) {
+        let percent = ((amountRaised / targetAmount) * 100).toFixed(2);
+        if (percent >= 100) return 100;
+        return percent;
+      }
+      function getDate(timestamp) {
+        const date = new Date(timestamp * 1000);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        let formattedDate = `${day}/${month}/${year}`;
+        return formattedDate;
+      }
+      main().then(() => {
+        campaigns.forEach((campaign, index) => {
+          let element = `<article>
+        <a href="${campaign.image}" class="image"><img src="${
+            campaign.image
+          }" alt="prj img" /></a>
+        <h3 class="major">${campaign.title}</h3>
+        <p>
+          ${campaign.description}
+        </p>
+        <label>${calcProgress(
+          campaign.amountRaised,
+          campaign.targetAmount
+        )}%</label>
+        <div style="width: 100%; height: 10px; background-color: #7d7d7d; border-radius: 5px; margin-bottom: 1rem">
+          <div style="height:100%; width:${calcProgressbar(
+            campaign.amountRaised,
+            campaign.targetAmount
+          )}%; background-color: #7895ff; border-radius: 5px"></div>
+          </div>
+          <label><span style="color:#7895ff">${
+            campaign.amountRaised
+          } XEV </span> raised out of <span style="color:#7895ff">${
+            campaign.targetAmount
+          } XEV<span></label>
+            <div style="margin-bottom:1rem">
+              <span style="display:block; font-size: 1rem">Location: ${
+                campaign.location
+              }</span>
+              <span style="display:block; font-size: 1rem">Project Deadline: ${getDate(
+                campaign.endDate
+              )}</span>
+              <span style="display:block; font-size: 1rem">Project Owner: <span class="ownerAddr">${
+                campaign.owner
+              }</span></span>
+              </div>
+              <input type="number" min="0" class="donate" placeholder="Token Amount" />
+            <button style="margin-block: 1rem" class="donateBTN" data-campaign-index="${index}">Donate</button>
+          </article>`;
+          container.innerHTML += element;
+          // <div class="popup">
+          //   <div class="closeBTN">&#10006;</div>
+          //   <div class="fom">
+          //     <h2>${campaign.title}</h2>
+          //     <p>
+          //       Every donation, no matter how big or small, plays a vital role
+          //       in our mission. Your support is a beacon of hope for those in
+          //       need. Together, we can accomplish extraordinary things and bring
+          //       about positive, lasting change. Thank you for believing in our
+          //       cause and taking action to make a difference.
+          //     </p>
+          //     <input
+          //       type="number"
+          //       min="0"
+          //       class="donate"
+          //       placeholder="Token Amount"
+          //     />
+          //     <button
+          //       class="donateBTN"
+          //       style="
+          //             display: block;
+          //             background-color: #7895ff;
+          //             margin-block: 1rem;
+          //           "
+          //     >
+          //       Donate
+          //     </button>
+          //   </div>
+          // </div>;
+
+          document.querySelectorAll(".donateBTN").forEach((button) => {
+            button.addEventListener("click", (e) => {
+              e.stopPropagation();
+              const campaignIndex = button.getAttribute("data-campaign-index");
+              const article = container.querySelector(
+                `article:nth-child(${parseInt(campaignIndex) + 1})`
+              );
+              let amt = article.querySelector(".donate").value;
+              console.log(article.querySelector(".ownerAddr").textContent);
+              console.log(campaignIndex, amt);
+
+              if (amt === "" || amt === 0) {
+                window.alert("Token Amount must be greater than 0");
+              } else {
+                handleTransfer(
+                  article.querySelector(".ownerAddr").textContent,
+                  amt,
+                  campaignIndex
+                ).then((x) => {
+                  if (x === true) {
+                    window.alert("SUCCESS!!");
+                    window.location.reload(true);
+                    console.log("DONATION SUCCESSFUL");
+                  }
+                });
+              }
+            });
+          });
+
+          // buttons.addEventListener;
+
+          // container.addEventListener("click", (event) => {
+          //   if (event.target.classList.contains("openPopup")) {
+          //     event.stopPropagation();
+          //     const button = event.target;
+
+          //   }
+          // });
+        });
+      });
+
+      // <span>Total Donations: ${campaign.donations.length}</span>
+    </script>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/jquery.scrollex.min.js"></script>
+    <script src="./js/browser.min.js"></script>
+    <script src="./js/breakpoints.min.js"></script>
+    <script src="./js/util.js"></script>
+    <script src="./js/main.js"></script>
+  </body>
+</html>
