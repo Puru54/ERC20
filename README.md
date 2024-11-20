@@ -99,7 +99,7 @@ The smart contract enables the creation of fundraising campaigns, purchasing tok
 This project is licensed under the MIT License.
 
 ## Contributors
-- [Your Name] - Developer and maintainer.
+- Puru - Developer and maintainer.
 
 ## Acknowledgements
 - OpenZeppelin for their ERC-20 implementation.
